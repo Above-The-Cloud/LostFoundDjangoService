@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from LostFoundDjangoService import view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^hello$', view.hello),
+    url(r'^$', view.hello),
+    url(r'^service/', include('service.urls')),
 ]
