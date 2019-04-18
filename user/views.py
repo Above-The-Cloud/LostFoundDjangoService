@@ -99,3 +99,21 @@ def getById(request):
         traceback.print_exc()
 
     return HttpResponse(json.dumps(res))
+
+def update(request):
+    res = {'code': 0, 'msg': 'success', 'data': []}
+    if not {'user_id','contact_type','contact_value'}.issubset(set(request.GET.keys())):
+        return HttpResponse(json.dumps({'code': -3, 'msg': 'unexpected params!', 'data': []}))
+    try:
+        user_id = request.GET['user_id'].strip()
+        # print(request.GET)
+        params=request.GET.dict()
+        # print(params)
+        params.pop('user_id')
+        # print(params)
+        UserInfo.objects.filter(user_id=user_id).update(**params)
+
+    except:
+        traceback.print_exc()
+
+    return HttpResponse(json.dumps(res))

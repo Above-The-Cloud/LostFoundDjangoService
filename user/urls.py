@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^studentLogin$', views.studentLogin),
     url(r'^logout$', views.logout),
     url(r'^getById$', views.getById),
+    url(r'^update$', views.update),
 
 ]
