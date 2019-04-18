@@ -1,13 +1,19 @@
 import json
+import os
+import random
+import time
 import traceback
 
+import requests
 from django.core import serializers
 
 # Create your views here.
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
+from LostFoundDjangoService import settings
 from LostFoundDjangoService.models import UserOpenid, Student, UserInfo
+from LostFoundDjangoService.settings import MEDIA_URL_PREFIX
 from lib import client
 
 
@@ -58,7 +64,19 @@ def loginByUid(request):
                     UserOpenid.objects.create(openid=openid, user_id=user_id)
 
                 if (UserInfo.objects.filter(user_id=user_id).count()) == 0:
-                    UserInfo.objects.create(user_id=user_id,nick_name=user_info['data']['name'],role=2,avatar_url=avatar_url)
+                    r = requests.get(avatar_url)
+                    date = time.strftime('%Y%m%d', time.localtime())
+                    dirs = settings.MEDIA_ROOT + '/avatar/' + date + '/'
+                    url_mid = '/media/avatar/' + date + '/'
+                    fname = 'dynamic_' + str(int(round(time.time() * 1000))) + '_' + str(random.randint(0, 10000)) + 'jpg'
+                    folder = os.path.exists(dirs)
+                    if not folder:  # 判断是否存在文件夹如果不存在则创建为文件夹
+                        os.makedirs(dirs)
+                    with open(dirs+fname, "wb") as code:
+                        code.write(r.content)
+
+                    UserInfo.objects.create(user_id=user_id,nick_name=user_info['data']['name'],role=2,avatar_url=MEDIA_URL_PREFIX+url_mid+fname)
+
                 else:
                     UserInfo.objects.filter(user_id=user_id).update(avatar_url=avatar_url)
             elif user_info['ret']==0:

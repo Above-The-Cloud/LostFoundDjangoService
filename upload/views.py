@@ -30,10 +30,9 @@ def uploadImg(request):
                 os.makedirs(dirs)  # makedirs 创建文件时如果路径不存在会创建这个路径
             try:
                 for file in files:
-                    t = time.time()     #PS：注释中的是上传文件中的另一种方法哦。各自选用
                     fname = file.name
                     suffix = os.path.splitext(file.name)[1]
-                    fname = 'dynamic_' + str(int(round(t * 1000))) + '_' + str(random.randint(0,10000)) + suffix
+                    fname = 'dynamic_' + str(int(round(time.time() * 1000))) + '_' + str(random.randint(0,10000)) + suffix
                     path = dirs + fname
                     f = open(path,'wb')
                     for line in file.chunks():

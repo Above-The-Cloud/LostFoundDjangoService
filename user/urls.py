@@ -2,6 +2,7 @@
 from django.conf.urls import url
 from django.urls import include
 
+from user.script import import_user
 from . import views
 
 urlpatterns = [
@@ -11,5 +12,7 @@ urlpatterns = [
     url(r'^logout$', views.logout),
     url(r'^getById$', views.getById),
     url(r'^update$', views.update),
+    url(r'^import_user$', import_user.import_user),
+
 
 ]
