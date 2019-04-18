@@ -16,11 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
+from django.views.static import serve
 
-from LostFoundDjangoService import view
+from LostFoundDjangoService import view, settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', view.hello),
     url(r'^service/', include('service.urls')),
+    url(r'^static/(?P<path>.*)$',serve, {'document_root': settings.STATIC_ROOT}),
 ]

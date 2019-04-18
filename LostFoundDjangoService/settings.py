@@ -85,8 +85,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'lostfound',
-        'USER':'root',
-        'PASSWORD':'123456',
+        'USER':'lostfound',
+        'PASSWORD':'lostfound',
         'HOST':'127.0.0.1',
         'PORT':'3306',
     }
