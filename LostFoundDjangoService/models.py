@@ -140,7 +140,7 @@ class Dynamic(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     images = models.TextField()
-    status = models.IntegerField()
+    status = models.IntegerField(default=1)
     ctime = models.DateTimeField(default = timezone.now)
     mtime = models.DateTimeField(auto_now = True)
 
