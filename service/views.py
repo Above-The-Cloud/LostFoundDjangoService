@@ -73,3 +73,30 @@ def loginByUid(request):
 @csrf_exempt
 def studentLogin(request):
     return HttpResponse(client.studentLogin(request.POST['stu_id'],request.POST['stu_pwd']))
+
+def logout(request):
+    res = {'code': 0, 'msg': 'success', 'data': []}
+    if not {'user_id','openid'}.issubset(set(request.GET.keys())):
+        return HttpResponse(json.dumps({'code': -3, 'msg': 'unexpected params!', 'data': []}))
+    try:
+        user_id = request.GET['user_id'].strip()
+        openid = request.GET['openid'].strip()
+        if (UserOpenid.objects.filter(openid=openid, user_id=user_id).count()) > 0:
+            UserOpenid.objects.filter(openid=openid, user_id=user_id).update(status=0)
+    except:
+        traceback.print_exc()
+    return HttpResponse(json.dumps(res))
+
+def getById(request):
+    res = {'code': 0, 'msg': 'success', 'data': []}
+    if not {'user_id'}.issubset(set(request.GET.keys())):
+        return HttpResponse(json.dumps({'code': -3, 'msg': 'unexpected params!', 'data': []}))
+    try:
+        user_id = request.GET['user_id'].strip()
+        res['data']=json.loads(serializers.serialize("json", UserInfo.objects.filter(user_id=user_id)))
+        print(res)
+
+    except:
+        traceback.print_exc()
+
+    return HttpResponse(json.dumps(res))

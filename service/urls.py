@@ -11,5 +11,7 @@ urlpatterns = [
     url(r'^loginByOpenid$', views.loginByOpenid),
     url(r'^loginByUid$', views.loginByUid),
     url(r'^studentLogin$', views.studentLogin),
+    url(r'^logout$', views.logout),
+    url(r'^getById$', views.getById),
 
 ]
