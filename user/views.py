@@ -102,7 +102,7 @@ def getById(request):
 
 def update(request):
     res = {'code': 0, 'msg': 'success', 'data': []}
-    if not {'user_id','contact_type','contact_value'}.issubset(set(request.GET.keys())):
+    if not {'user_id'}.issubset(set(request.GET.keys())):
         return HttpResponse(json.dumps({'code': -3, 'msg': 'unexpected params!', 'data': []}))
     try:
         user_id = request.GET['user_id'].strip()
