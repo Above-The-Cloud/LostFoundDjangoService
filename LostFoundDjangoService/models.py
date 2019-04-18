@@ -134,7 +134,7 @@ class DjangoSession(models.Model):
 
 
 class Dynamic(models.Model):
-    user_id = models.IntegerField()
+    user_id = models.BigIntegerField()
     type = models.CharField(max_length=255)
     category = models.CharField(max_length=255)
     title = models.CharField(max_length=255)

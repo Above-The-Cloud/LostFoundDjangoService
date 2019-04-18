@@ -22,8 +22,9 @@ def uploadImg(request):
         if not files:
             res={'code':-1,'msg':"无上传图片", 'data':[]}
         else:
-            dirs = settings.MEDIA_ROOT + '/images/'
-            url_mid = '/media/images/'
+            date=time.strftime('%Y%m%d',time.localtime())
+            dirs = settings.MEDIA_ROOT + '/images/'+date+'/'
+            url_mid = '/media/images/'+date+'/'
             folder = os.path.exists(dirs)
             if not folder:  # 判断是否存在文件夹如果不存在则创建为文件夹
                 os.makedirs(dirs)  # makedirs 创建文件时如果路径不存在会创建这个路径
