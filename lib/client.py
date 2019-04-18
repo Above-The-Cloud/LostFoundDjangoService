@@ -11,8 +11,9 @@ def studentLogin(stu_id, stu_pwd):
     try:
         url = 'http://202.120.82.2:8081/ClientWeb/pro/ajax/login.aspx'
         params = {"id":stu_id,"pwd":stu_pwd,"act":'login'}
-        r=requests.post(url, data=params)
+        r=requests.post(url, data=params,timeout=5)
         print(r)
     except:
         traceback.print_exc()
+        return {'ret':-1}
     return json.loads(r.text)

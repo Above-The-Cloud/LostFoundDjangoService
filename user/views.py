@@ -20,13 +20,14 @@ from lib import client
 def hello(request):
     return HttpResponse("Hello world ! ")
 
+@csrf_exempt
 def loginByOpenid(request):
     res={'code':0, 'msg':'success', 'data':[]}
     try:
-        openid=request.GET['openid']
+        openid=request.POST['openid']
         qset=UserOpenid.objects.filter(openid=openid, status=1)
         if len(qset)==1:
-            res={'code':0, 'msg':'success', 'data':json.loads(serializers.serialize("json", qset))}
+            res={'code':0, 'msg':'success', 'data':json.loads(serializers.serialize("json", qset))[0]['fields']}
         else:
             res={'code':-1, 'msg':'user auto login failed!', 'data':[]}
     except:
@@ -34,15 +35,16 @@ def loginByOpenid(request):
     print(res)
     return HttpResponse(json.dumps(res))
 
+@csrf_exempt
 def loginByUid(request):
-    res={'code':0, 'msg':'success', 'data':[]}
-    if  not {'user_id','password','openid','avatar_url'}.issubset(set(request.GET.keys())):
+    res={'code':-4, 'msg':'fail', 'data':[]}
+    if  not {'user_id','password','openid','avatar_url'}.issubset(set(request.POST.keys())):
         return HttpResponse(json.dumps({'code':-3,'msg':'unexpected params!', 'data':[]}))
     try:
-        user_id=request.GET['user_id'].strip()
-        password=request.GET['password'].strip()
-        openid = request.GET['openid'].strip()
-        avatar_url = request.GET['avatar_url'].strip()
+        user_id=request.POST['user_id'].strip()
+        password=request.POST['password'].strip()
+        openid = request.POST['openid'].strip()
+        avatar_url = request.POST['avatar_url'].strip()
         print(user_id[:2])
         if user_id[:2]=='78': #楼宇管理员
             qset = Student.objects.filter(stu_id=user_id, stu_pwd=password)
@@ -68,7 +70,7 @@ def loginByUid(request):
                     date = time.strftime('%Y%m%d', time.localtime())
                     dirs = settings.MEDIA_ROOT + '/avatar/' + date + '/'
                     url_mid = '/media/avatar/' + date + '/'
-                    fname = 'dynamic_' + str(int(round(time.time() * 1000))) + '_' + str(random.randint(0, 10000)) + 'jpg'
+                    fname = 'avatar_' + str(int(round(time.time() * 1000))) + '_' + str(random.randint(0, 10000)) + 'jpg'
                     folder = os.path.exists(dirs)
                     if not folder:  # 判断是否存在文件夹如果不存在则创建为文件夹
                         os.makedirs(dirs)
@@ -76,13 +78,14 @@ def loginByUid(request):
                         code.write(r.content)
 
                     UserInfo.objects.create(user_id=user_id,nick_name=user_info['data']['name'],role=2,avatar_url=MEDIA_URL_PREFIX+url_mid+fname)
+                    res = {'code': 0, 'msg': 'success', 'data': json.loads(serializers.serialize("json", UserInfo.objects.filter(user_id=user_id)))[0]['fields']}
 
                 else:
                     UserInfo.objects.filter(user_id=user_id).update(avatar_url=avatar_url)
             elif user_info['ret']==0:
                 res = {'code': -2, 'msg': '用户名或密码不正确', 'data': []}
             else:
-                res = {'code': -3, 'msg': '校园网络管制！', 'data': []}
+                res = {'code': -3, 'msg': '网络错误！', 'data': []}
     except:
         traceback.print_exc()
     return HttpResponse(json.dumps(res))
@@ -91,26 +94,28 @@ def loginByUid(request):
 def studentLogin(request):
     return HttpResponse(client.studentLogin(request.POST['stu_id'], request.POST['stu_pwd']))
 
+@csrf_exempt
 def logout(request):
     res = {'code': 0, 'msg': 'success', 'data': []}
-    if not {'user_id','openid'}.issubset(set(request.GET.keys())):
+    if not {'user_id','openid'}.issubset(set(request.POST.keys())):
         return HttpResponse(json.dumps({'code': -3, 'msg': 'unexpected params!', 'data': []}))
     try:
-        user_id = request.GET['user_id'].strip()
-        openid = request.GET['openid'].strip()
+        user_id = request.POST['user_id'].strip()
+        openid = request.POST['openid'].strip()
         if (UserOpenid.objects.filter(openid=openid, user_id=user_id).count()) > 0:
             UserOpenid.objects.filter(openid=openid, user_id=user_id).update(status=0)
     except:
         traceback.print_exc()
     return HttpResponse(json.dumps(res))
 
+@csrf_exempt
 def getById(request):
     res = {'code': 0, 'msg': 'success', 'data': []}
-    if not {'user_id'}.issubset(set(request.GET.keys())):
+    if not {'user_id'}.issubset(set(request.POST.keys())):
         return HttpResponse(json.dumps({'code': -3, 'msg': 'unexpected params!', 'data': []}))
     try:
-        user_id = request.GET['user_id'].strip()
-        res['data']=json.loads(serializers.serialize("json", UserInfo.objects.filter(user_id=user_id)))
+        user_id = request.POST['user_id'].strip()
+        res['data']=json.loads(serializers.serialize("json", UserInfo.objects.filter(user_id=user_id)))[0]['fields']
         print(res)
 
     except:
@@ -118,14 +123,15 @@ def getById(request):
 
     return HttpResponse(json.dumps(res))
 
+@csrf_exempt
 def update(request):
     res = {'code': 0, 'msg': 'success', 'data': []}
-    if not {'user_id'}.issubset(set(request.GET.keys())):
+    if not {'user_id'}.issubset(set(request.POST.keys())):
         return HttpResponse(json.dumps({'code': -3, 'msg': 'unexpected params!', 'data': []}))
     try:
-        user_id = request.GET['user_id'].strip()
+        user_id = request.POST['user_id'].strip()
         # print(request.GET)
-        params=request.GET.dict()
+        params=request.POST.dict()
         # print(params)
         params.pop('user_id')
         # print(params)
