@@ -144,5 +144,7 @@ def update(request):
 
 @csrf_exempt
 def getOpenid(request):
+    if not {'js_code'}.issubset(set(request.POST.keys())):
+        return HttpResponse(json.dumps({'code': -3, 'msg': 'unexpected params!', 'data': request.POST.dict()}))
     res=client.getOpenid(request.POST['js_code'])
     return HttpResponse(json.dumps(res))
