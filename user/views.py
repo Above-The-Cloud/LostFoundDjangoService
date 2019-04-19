@@ -49,7 +49,7 @@ def loginByUid(request):
         if user_id[:2]=='78': #楼宇管理员
             qset = Student.objects.filter(stu_id=user_id, stu_pwd=password)
             if len(qset)==1:
-                res = {'code': 0, 'msg': 'success', 'data': json.loads(serializers.serialize("json", qset))}
+                res = {'code': 0, 'msg': 'success', 'data': json.loads(serializers.serialize("json", UserInfo.objects.filter(user_id=user_id)))[0]['fields']}
                 if(UserOpenid.objects.filter(openid=openid,user_id=user_id).count())>0:
                     UserOpenid.objects.filter(openid=openid, user_id=user_id).update(status=1)
                 else:
