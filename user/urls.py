@@ -12,7 +12,6 @@ urlpatterns = [
     url(r'^logout$', views.logout),
     url(r'^getById$', views.getById),
     url(r'^update$', views.update),
-    url(r'^import_user$', import_user.import_user),
-
+    # url(r'^import_user$', import_user.import_user),
 
 ]
