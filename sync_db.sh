@@ -1,0 +1,1 @@
+venv/bin/python manage.py inspectdb > LostFoundDjangoService/models.py
