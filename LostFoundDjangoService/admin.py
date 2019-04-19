@@ -27,6 +27,6 @@ admin.site.site_title="ECNU LostFound"
 # 登录页导航条和首页导航条标题
 admin.site.site_header="ECNU LostFound Administration"
 # 主页标题
-admin.site.index_title="Welcome"
+admin.site.index_title="Welcome, you can manage the backstage now!"
 
 # admin.site.register([Student, UserInfo, UserOpenid, Dynamic])

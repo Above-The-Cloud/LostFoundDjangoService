@@ -141,3 +141,8 @@ def update(request):
         traceback.print_exc()
 
     return HttpResponse(json.dumps(res))
+
+@csrf_exempt
+def getOpenid(request):
+    res=client.getOpenid(request.POST['js_code'])
+    return HttpResponse(json.dumps(res))
