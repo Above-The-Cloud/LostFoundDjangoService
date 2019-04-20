@@ -13,13 +13,14 @@ from LostFoundDjangoService.models import Dynamic, UserInfo
 
 @csrf_exempt
 def create(request):
-    res = {'code': 0, 'msg': 'success', 'data': []}
-    if not {'user_id','type','category','content'}.issubset(request.POST.keys()):
+    res = {'code': 0, 'msg': 'success', 'data': {}}
+    if not {'user_id','type','content'}.issubset(request.POST.keys()):
         return HttpResponse(json.dumps({'code': -1, 'msg': 'unexpected params!', 'data': []}))
     try:
         params = request.POST.dict()
         params['images']=json.dumps([])
-        Dynamic.objects.create(**params)
+        dynamic=Dynamic.objects.create(**params)
+        res['data']['dynamic_id']=dynamic.id
     except:
         traceback.print_exc()
     return HttpResponse(json.dumps(res))

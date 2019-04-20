@@ -6,6 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 import datetime
+import json
 
 from django.db import models
 from django.utils import timezone
@@ -135,11 +136,11 @@ class DjangoSession(models.Model):
 
 class Dynamic(models.Model):
     user_id = models.BigIntegerField()
-    type = models.CharField(max_length=255)
-    category = models.CharField(max_length=255)
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    images = models.TextField()
+    type = models.CharField(max_length=255,default='')
+    category = models.CharField(max_length=255, default='')
+    title = models.CharField(max_length=255, default='')
+    content = models.TextField(default='')
+    images = models.TextField(default=json.dumps([]))
     status = models.IntegerField(default=1)
     ctime = models.DateTimeField(default = timezone.now)
     mtime = models.DateTimeField(auto_now = True)
