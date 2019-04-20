@@ -68,7 +68,7 @@ def show(request):
         params['status']=1
         res['data']['count']=Dynamic.objects.filter(**params).count()
         res['data']['dynamics']=[]
-        qset=Dynamic.objects.filter(**params).order_by('ctime')[page*size:(page+1)*size]
+        qset=Dynamic.objects.filter(**params).order_by('-ctime')[page*size:(page+1)*size]
         dynamics=json.loads(serializers.serialize("json", qset))
         print(dynamics)
         for dynamic in dynamics:
