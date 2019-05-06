@@ -82,6 +82,8 @@ def loginByUid(request):
 
                 else:
                     UserInfo.objects.filter(user_id=user_id).update(avatar_url=avatar_url)
+                    res = {'code': 0, 'msg': 'success', 'data': json.loads(serializers.serialize("json", UserInfo.objects.filter(user_id=user_id)))[0]['fields']}
+
             elif user_info['ret']==0:
                 res = {'code': -2, 'msg': '用户名或密码不正确', 'data': []}
             else:
