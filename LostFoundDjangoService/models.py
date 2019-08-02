@@ -141,6 +141,7 @@ class Dynamic(models.Model):
     title = models.CharField(max_length=255, default='')
     content = models.TextField(default='')
     images = models.TextField(default=json.dumps([]))
+    location = models.TextField(default=json.dumps({}),blank=True,null=True)
     status = models.IntegerField(default=1)
     ctime = models.DateTimeField(default = timezone.now)
     mtime = models.DateTimeField(auto_now = True)

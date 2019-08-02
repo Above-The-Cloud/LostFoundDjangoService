@@ -77,6 +77,7 @@ def show(request):
             data_row=dynamic['fields']
             data_row['dynamic_id']=dynamic['pk']
             data_row['images']=json.loads(data_row['images'])
+            data_row['location'] = json.loads(data_row['location'])
             data_row['user_info'] = json.loads(serializers.serialize("json", UserInfo.objects.filter(user_id=dynamic['fields']['user_id'])))[0]['fields']
             res['data']['dynamics'].append(data_row)
     except:
