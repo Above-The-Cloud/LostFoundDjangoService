@@ -36,8 +36,14 @@ def update(request):
         dynamic_id = request.POST['dynamic_id']
         params = request.POST.dict()
         params.pop('dynamic_id')
-        print(params)
         Dynamic.objects.filter(id=dynamic_id).update(**params)
+
+        if "category" in params:
+            obj,created = Category.objects.get_or_create(name=params['category'])
+            print(obj,created)
+            if not created:
+                obj.cnt=obj.cnt+1
+                obj.save()
     except:
         traceback.print_exc()
     return HttpResponse(json.dumps(res))

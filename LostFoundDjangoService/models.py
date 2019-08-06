@@ -193,8 +193,8 @@ class UserOpenid(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
-    cnt = models.BigIntegerField()
-    status = models.IntegerField()
+    cnt = models.BigIntegerField(default=1)
+    status = models.IntegerField(default=1)
     ctime = models.DateTimeField()
     mtime = models.DateTimeField()
 
