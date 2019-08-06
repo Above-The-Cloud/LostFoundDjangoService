@@ -17,8 +17,8 @@ class UserOpenidAdmin(admin.ModelAdmin):
     search_fields = ('id','user_id','openid','status','ctime','mtime')
 
 class DynamicAdmin(admin.ModelAdmin):
-    list_display = ('id','user_id','type','category','title','content','location','images','status','ctime','mtime')
-    search_fields = ('id','user_id','type','category','title','content','location','images','status','ctime','mtime')
+    list_display = ('id','user_id','type','category','content','location','status','ctime','mtime')
+    search_fields = ('id','user_id','type','category','content','location','status','ctime','mtime')
 
 
 admin.site.register(Student,StudentAdmin)

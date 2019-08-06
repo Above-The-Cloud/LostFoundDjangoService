@@ -190,3 +190,14 @@ class UserOpenid(models.Model):
     class Meta:
         managed = False
         db_table = 'user_openid'
+
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+    cnt = models.BigIntegerField()
+    status = models.IntegerField()
+    ctime = models.DateTimeField()
+    mtime = models.DateTimeField()
+
+    class Meta:
+        managed = True
+        db_table = 'category'

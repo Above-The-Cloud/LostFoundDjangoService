@@ -10,7 +10,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
 
-from LostFoundDjangoService.models import Dynamic, UserInfo
+from LostFoundDjangoService.models import Dynamic, UserInfo, Category
 
 
 @csrf_exempt
@@ -119,4 +119,16 @@ def picRcgnz(request):
                 res['code']=-2
                 res['msg']=e
                 res['data']=[]
+    return HttpResponse(json.dumps(res))
+
+@csrf_exempt
+def categories(request):
+    res = {'code': 0, 'msg': 'success', 'data': []}
+    try:
+        qset=Category.objects.all().order_by('-cnt')
+        cs=json.loads(serializers.serialize("json", qset))
+        for c in cs:
+            res['data'].append(c['fields']['name'])
+    except:
+        traceback.print_exc()
     return HttpResponse(json.dumps(res))
