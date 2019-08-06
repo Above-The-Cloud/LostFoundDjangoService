@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^delete$', views.delete),
     url(r'^show$', views.show),
     url(r'^picRcgnz$', views.picRcgnz),
+    url(r'^categories$', views.categories),
 ]
