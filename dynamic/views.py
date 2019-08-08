@@ -135,6 +135,7 @@ def categories(request):
         cs=json.loads(serializers.serialize("json", qset))
         for c in cs:
             res['data'].append(c['fields']['name'])
+        res['data']=res['data'][:6]
     except:
         traceback.print_exc()
     return HttpResponse(json.dumps(res))
