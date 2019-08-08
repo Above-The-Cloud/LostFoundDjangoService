@@ -66,7 +66,7 @@ def show(request):
     try:
         params = request.POST.dict()
         page=0
-        size=20
+        size=40
         if 'page' in params:
             page=params['page']
             params.pop('page')
