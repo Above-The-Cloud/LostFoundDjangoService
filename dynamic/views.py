@@ -11,6 +11,8 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 from LostFoundDjangoService.models import Dynamic, UserInfo, Category
+from lib.sms import send
+from notify.models import Notify
 
 
 @csrf_exempt
@@ -23,6 +25,18 @@ def create(request):
         params['images']=json.dumps([])
         dynamic=Dynamic.objects.create(**params)
         res['data']['dynamic_id']=dynamic.id
+
+        if  dynamic.type=='found' and dynamic.meta and len(dynamic.meta)>2:
+            stuid=dynamic.meta
+            user=UserInfo.objects.filter(user_id=stuid)
+            user=json.loads(serializers.serialize("json", user))
+            if len(user)>0:
+                user=user[0]['fields']
+                if user['contact_type'] == '手机号':
+                    send(user['contact_value'], user['nick_name'], '校园卡')
+                Notify.objects.create(user_id=stuid, dynamic_id=dynamic.id)
+            else:
+                pass
     except:
         traceback.print_exc()
     return HttpResponse(json.dumps(res))
